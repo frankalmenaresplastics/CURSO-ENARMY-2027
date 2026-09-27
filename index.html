@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Curso ENARM 2027 · Médicos Extranjeros</title>
+<style>
+:root{
+  --bg:#f7f7f5;--card:#ffffff;--ink:#1e1e1e;--sub:#5c5c5c;--line:#e4e2dd;
+  --accent:#8b3a3a;--accent2:#2f5d50;--radius:14px;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  box-sizing:border-box;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#17181a;--card:#212226;--ink:#eee;--sub:#a8a8a8;--line:#33353a;}
+}
+:root[data-theme="dark"]{--bg:#17181a;--card:#212226;--ink:#eee;--sub:#a8a8a8;--line:#33353a;}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Georgia',ui-serif,serif;line-height:1.5;}
+header{position:sticky;top:0;padding:env(safe-area-inset-top,0px) 16px 0;background:var(--bg);z-index:10;border-bottom:1px solid var(--line)}
+h1{font-size:1.15rem;margin:12px 0 4px;color:var(--accent)}
+.sub{color:var(--sub);font-size:.82rem;margin-bottom:10px}
+nav{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px}
+nav button{flex:0 0 auto;padding:8px 14px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:inherit;font-size:.85rem;cursor:pointer}
+nav button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+main{max-width:760px;margin:0 auto;padding:16px 16px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.tema{border-bottom:1px solid var(--line);padding:8px 0}
+.tema:last-child{border-bottom:none}
+.tema b{color:var(--accent2)}
+.tema p{margin:4px 0 0;font-size:.92rem;color:var(--sub)}
+details summary{cursor:pointer;font-weight:bold;color:var(--accent);padding:6px 0}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+th,td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line)}
+th{color:var(--sub);font-weight:normal}
+.wrap{overflow-x:auto}
+.opt{display:block;width:100%;text-align:left;padding:10px 12px;margin:6px 0;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-family:inherit;cursor:pointer;font-size:.9rem}
+.opt.correct{background:#2f5d5033;border-color:var(--accent2)}
+.opt.wrong{background:#8b3a3a33;border-color:var(--accent)}
+.just{margin-top:10px;padding:10px;background:var(--bg);border-radius:10px;font-size:.85rem;display:none}
+.caseh{color:var(--accent2);margin:0 0 6px}
+.fc{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);min-height:150px;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-size:1rem;cursor:pointer}
+.fcbar{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:.85rem;color:var(--sub)}
+.fcbar button{padding:8px 14px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:inherit;cursor:pointer}
+.tag{display:inline-block;font-size:.72rem;color:var(--accent2);border:1px solid var(--accent2);border-radius:10px;padding:1px 8px;margin-bottom:6px}
+.tag.known{background:var(--accent2);color:#fff}
+.markbar{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.markbar button{flex:1;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:inherit;cursor:pointer;font-size:.85rem}
+.panelrow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:.88rem}
+.muted{color:var(--sub);font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+<h1>📘 Curso Intensivo ENARM 2027</h1>
+<div class="sub">Programa para médicos extranjeros — comparte este enlace con tus estudiantes</div>
+<nav id="nav"></nav>
+</header>
+<main id="main"></main>
+<script>
+const temario = [
+["Urgencias Médicas",[
+["RCP en adultos","Compresiones 5-6 cm, 100-120/min, minimizar interrupciones. Manejo GPC: iniciar compresiones antes que ventilación."],
+["Golpe de calor","Criterios de Bouchama: Tª>40°C + disfunción del SNC. Enfriamiento agresivo inmediato, meta <39°C en 30 min."],
+["Tétanos","Trismo + risa sardónica; toxina bloquea GABA/glicina. Profilaxis según herida y estado vacunal."],
+["Hemotórax","Masivo: >1500 mL o >200 mL/h. Sonda pleural vs. toracotomía de urgencia."]]],
+["Medicina Interna",[
+["Riesgo cardiovascular","Diferenciar riesgo relativo/absoluto/global; determina intensidad de estatina."],
+["Complicaciones vasculares DM","Micro (retino/nefro/neuropatía) vs. macroangiopatía. Tamizaje anual en México (DM2 >10% adultos)."],
+["Feocromocitoma","Regla de los dieces (10% bilateral/extraadrenal/maligno/familiar), Zellballen. Bloqueo alfa antes que beta."],
+["EPOC / Asma","VEF1/CVF<0.70 confirma EPOC. Asma: exacerbación lenta (infecciosa) vs. rápida (alergénica)."],
+["Derrame pleural","Criterios de Light: proteína pleura/suero>0.5, LDH pleura/suero>0.6."],
+["Anemia megaloblástica","B12 vía receptor cubam (íleon). Nunca dar folato sin descartar déficit de B12."],
+["Delirium","Escala CAM: inicio agudo + curso fluctuante + inatención + alteración de conciencia."],
+["Dengue / Nefrolitiasis","Fuga capilar en dengue grave. Litos: oxalato de calcio (más frecuente)."]]],
+["Pediatría",[
+["Dermatitis atópica","Criterios de Hanifin-Rajka; disfunción de filagrina."],
+["Coxsackie (mano-pie-boca)","A6 da onicomadesis tardía; A16 clásico; EV71 vigilar complicación neurológica."],
+["OMA","Fases serosa→presupurativa→supurativa. Amoxicilina primera línea."],
+["Crisis febriles","Simple: <15min, generalizada, no recurre en 24h — no requiere FAE profiláctico."],
+["Sarampión / Meningococcemia","Koplik + exantema cefalocaudal vs. púrpura fulminante (urgencia vital)."],
+["Déficit de vitamina A","Xeroftalmia, ceguera nocturna. Suplementación oral programática."]]],
+["Gineco-Obstetricia",[
+["Embarazo ectópico","Triada: dolor+amenorrea+sangrado. Metotrexato si estable/no roto."],
+["Aborto (variantes)","Amenaza/inevitable/incompleto/completo/diferido/habitual. Anti-D si Rh negativo."],
+["Cesárea (NOM-007)","Indicaciones normativas; profilaxis antibiótica única preincisión."],
+["Enfermedad trofoblástica","Mola completa (46XX, sin tejido fetal) vs. parcial (triploide). Seguimiento con β-hCG."],
+["Síndrome HELLP","Hemólisis+enzimas hepáticas+trombocitopenia. Tratamiento definitivo: interrupción del embarazo."]]],
+["Cirugía General",[
+["Hernia umbilical","Técnica de Mayo en adultos con defecto >2cm."],
+["Reconstrucción mamaria","Inmediata/mediata/tardía según indicación oncológica."],
+["Colecistitis/colelitiasis","Criterios de Tokio 2018 definen colecistectomía temprana vs. diferida."],
+["Hepatocarcinoma","Tamizaje en cirrosis: USG±AFP cada 6 meses."]]],
+["Traumatología",[
+["Lumbago","Diferenciar mecánico-inespecífico de hernia discal con radiculopatía."],
+["Hombro doloroso","Manguito rotador, tendinitis bicipital, bursitis subacromial."],
+["Codo pediátrico","Fractura supracondílea: vigilar síndrome compartimental."],
+["Tobillo","Reglas de Ottawa para indicar radiografía."]]],
+["Salud Pública",[
+["Escorbuto","Déficit de vitC afecta hidroxilación del colágeno."],
+["Obesidad","Sistema Mexicano de Alimentos Equivalentes (SMAE)."],
+["Dengue","Sin/con datos de alarma/grave según fuga capilar."],
+["NOMs y vacunación","Esquema Nacional de Vacunación — prioritario para el extranjero."]]]
+];
+
+const calendario = [
+["1","1-4","Inducción + Urgencias","Sistema de salud MX, NOMs clave, RCP, golpe de calor, tétanos, hemotórax","Simulacro 1"],
+["2","5-8","Med. Interna I (Cardio-Endo)","Riesgo CV, diabetes, feocromocitoma","Simulacro 2"],
+["3","9-12","Med. Interna II (Neumo-Hemato)","EPOC, asma, derrame pleural, anemia, hemofilia","Simulacro 3"],
+["4","13-16","Med. Interna III (Neuro-Geri-Infecto)","Convulsiones, depresión, delirium, COVID, nefrolitiasis","Simulacro 4"],
+["5","17-20","Pediatría I","Dermatitis atópica, Coxsackie, amigdalitis, OMA","Simulacro 5"],
+["6","21-25","Pediatría II","Exantemas, RGE, crisis febriles, vit. A","Simulacro 6"],
+["7","26-29","Gineco-Obstetricia I","Líquido amniótico, ectópico, aborto, cesárea","Simulacro 7"],
+["8","30-34","Gineco-Obstetricia II","ETG, dismenorrea, emergencias obstétricas, HELLP","Simulacro 8"],
+["9","35-38","Cirugía General","Hernia, reconstrucción mamaria, hemorroides, vía biliar","Simulacro 9"],
+["10","39-42","Traumatología","Lumbago, hombro, codo, tobillo","Simulacro 10"],
+["11","43-45","Salud Pública","Escorbuto, obesidad, dengue, NOMs/vacunación","Simulacro 11"],
+["12","46","Consolidación final","Megarrepaso troncal + simulacro general 450 reactivos","Análisis final"]
+];
+
+const casos = [
+["Endocrinología","Mujer de 34 años con cefalea episódica, palpitaciones y diaforesis de 3 meses; TA paroxística hasta 190/110. Metanefrinas fraccionadas elevadas.","¿Siguiente paso previo a cirugía?",
+["Iniciar betabloqueador primero","Bloqueo alfa y luego betabloqueo","Cirugía urgente sin premedicación","Iniciar IECA"],1,
+"Se debe iniciar bloqueo alfa-adrenérgico 10-14 días antes de agregar betabloqueo, para evitar crisis hipertensiva por vasoconstricción sin oposición. Betabloqueo aislado (A) puede precipitar la crisis; cirugía sin preparación (C) es de alto riesgo; IECA (D) no es manejo estándar preoperatorio."],
+["Gineco-Obstetricia","Primigesta 32 semanas con cefalea, dolor en hipocondrio derecho, edema; TA 160/108. Plaquetas 68,000, DHL elevada, esquistocitos, transaminasas al doble.","¿Tratamiento definitivo?",
+["Sulfato de magnesio en monoterapia y vigilancia expectante","Transfusión plaquetaria profiláctica ambulatoria","Interrupción del embarazo","Antihipertensivo oral y control en 1 semana"],2,
+"Cumple criterios de HELLP; el tratamiento definitivo es la interrupción del embarazo independiente de la edad gestacional (sulfato de magnesio es neuroprotección asociada, no sustituto). Las demás opciones subestiman la gravedad del cuadro."],
+["Pediatría","Lactante 14 meses con primera crisis convulsiva generalizada de 3 min asociada a fiebre de 39.2°C por faringitis; recupera alerta en 15 min, sin recurrencia en 24h.","¿Conducta más apropiada?",
+["Ácido valproico profiláctico indefinido","EEG de urgencia y punción lumbar sistemática","Educar a la familia, sin FAE profiláctico","Hospitalizar 72h para monitoreo"],2,
+"Es una crisis febril simple; la GPC no recomienda FAE profiláctico ni estudios invasivos sistemáticos en ausencia de datos de alarma. Hospitalización prolongada tampoco se justifica en un cuadro autolimitado."],
+["Cirugía General","Hombre 58 años, litiasis vesicular conocida, dolor en hipocondrio derecho 30h, fiebre 38.6°C, Murphy positivo, leucocitosis 15,000. USG: pared vesicular de 5mm, líquido perivesicular.","¿Conducta según criterios de Tokio?",
+["Manejo ambulatorio con antibiótico oral","Colecistectomía diferida a 6 semanas","Colecistectomía temprana en la hospitalización actual","CPRE como primer paso obligatorio"],2,
+"Corresponde a colecistitis aguda grado I-II; la GPC recomienda colecistectomía temprana (idealmente primeros 7 días) en la misma hospitalización. Diferir la cirugía aumenta riesgo de recurrencia; CPRE no está indicada sin evidencia de coledocolitiasis."],
+["Urgencias","Hombre 45 años con herida penetrante en tórax; TA 82/50, FC 128, ingurgitación yugular, ruidos velados. Sonda pleural con salida inicial de 1800 mL de sangre.","¿Siguiente paso?",
+["Observación con control radiológico en 6h","Toracotomía de urgencia","Pericardiocentesis como único procedimiento","Alta tras estabilización con líquidos IV"],1,
+"El drenaje >1500 mL define hemotórax masivo (indicación de toracotomía); además hay datos de taponamiento cardiaco. Observación (A) retrasa una cirugía ya indicada; pericardiocentesis (C) es puente, no definitivo; alta (D) es contraindicado por inestabilidad."],
+["Salud Pública","Paciente 26 años en zona endémica: fiebre 4 días, cefalea retroocular, exantema; hoy dolor abdominal intenso, vómito persistente, sangrado de encías; hematocrito +22%, plaquetas en descenso.","¿Clasificación según GPC?",
+["Dengue sin datos de alarma","Dengue con datos de alarma","Dengue grave","Se requieren más estudios"],1,
+"Dolor abdominal intenso, vómito persistente, sangrado de mucosas y hemoconcentración son datos de alarma establecidos, que obligan a hospitalización. No hay aún choque/daño orgánico severo para clasificarlo como grave."]
+];
+
+const flashcards = [
+["Urgencias","Profundidad y frecuencia de RCP en adulto","5-6 cm, 100-120/min; trampa: profundidad excesiva (>6cm) también es incorrecta"],
+["Urgencias","Criterio de Bouchama","Tª>40°C + disfunción del SNC"],
+["Urgencias","Volumen que define hemotórax masivo","1500 mL inicial o >200 mL/h por 2-4h"],
+["Med. Interna","Regla de los dieces del feocromocitoma","10% bilateral, 10% extraadrenal, 10% maligno, 10% familiar"],
+["Med. Interna","Patrón histológico del feocromocitoma","Zellballen (nidos celulares)"],
+["Med. Interna","Criterios de Light — exudado pleural","Proteína pleura/suero>0.5, LDH pleura/suero>0.6, o LDH pleural>2/3 del límite sérico"],
+["Med. Interna","Absorción de vitamina B12","Factor intrínseco → receptor cubam en íleon terminal"],
+["Med. Interna","Escala de delirium","CAM: inicio agudo + curso fluctuante + inatención + alteración de conciencia"],
+["Med. Interna","Trampa en anemia megaloblástica","Dar folato sin descartar B12 enmascara la anemia pero progresa la neuropatía"],
+["Pediatría","Serotipo asociado a onicomadesis tardía","Coxsackie A6"],
+["Pediatría","Crisis febril simple vs. compleja","Simple: <15min, generalizada, no recurre en 24h"],
+["Pediatría","Signo ocular de déficit de vitamina A","Xeroftalmia / ceguera nocturna"],
+["Pediatría","Estructura clave en amigdalitis recurrente","Anillo linfoide de Waldeyer"],
+["Gineco-Obstetricia","Triada del embarazo ectópico","Dolor pélvico + amenorrea + sangrado"],
+["Gineco-Obstetricia","Mola completa vs. parcial","Completa: 46XX sin tejido fetal; Parcial: triploide con tejido fetal"],
+["Gineco-Obstetricia","Componentes del HELLP","Hemólisis + enzimas hepáticas elevadas + trombocitopenia"],
+["Gineco-Obstetricia","Tratamiento definitivo del HELLP","Interrupción del embarazo"],
+["Gineco-Obstetricia","Manejo si Rh negativo tras aborto","Inmunoglobulina anti-D"],
+["Cirugía General","Técnica clásica de hernia umbilical del adulto","Técnica de Mayo"],
+["Cirugía General","Clasificación para colecistectomía urgente","Criterios de Tokio 2018"],
+["Cirugía General","Lito biliar más frecuente","Colesterol"],
+["Traumatología","Herramienta para radiografía de tobillo","Reglas de Ottawa"],
+["Traumatología","Complicación a vigilar en fractura supracondílea","Síndrome compartimental"],
+["Salud Pública","Mecanismo central del dengue grave","Fuga capilar"],
+["Salud Pública","Sistema de conteo de alimentos en México","SMAE (Sistema Mexicano de Alimentos Equivalentes)"],
+["Adaptación MX","¿Qué regula la NOM-007-SSA2?","Atención del embarazo, parto y puerperio, y del recién nacido"],
+["Adaptación MX","¿Qué es la Cartilla Nacional de Salud?","Documento oficial de seguimiento de vacunación y control de salud por edad"],
+["Adaptación MX","Trampa típica de distractor ENARM","Opción 'correcta pero no de primera línea' o 'correcta para otra fase de la enfermedad'"]
+];
+
+let tab='temario', caseIdx=0, fcIdx=0, fcFlipped=false, fcOrder=flashcards.map((_,i)=>i);
+let myProgress={known:[],cases:{}};
+try{const raw=localStorage.getItem('enarm_progress_v1');if(raw)myProgress=JSON.parse(raw);}catch(e){}
+const nav=document.getElementById('nav'), main=document.getElementById('main');
+const tabs=[['temario','Temario'],['calendario','Calendario'],['casos','Casos clínicos'],['flashcards','Flashcards']];
+function saveProgress(){
+  try{localStorage.setItem('enarm_progress_v1',JSON.stringify(myProgress));}catch(e){}
+}
+function renderNav(){
+  nav.innerHTML=tabs.map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?'active':''}">${t[1]}</button>`).join('');
+  nav.querySelectorAll('button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;caseIdx=0;render();});
+}
+function renderTemario(){
+  main.innerHTML=temario.map(([bloque,items])=>`
+    <details class="card"><summary>${bloque}</summary>
+    ${items.map(([tema,perla])=>`<div class="tema"><b>${tema}</b><p>${perla}</p></div>`).join('')}
+    </details>`).join('');
+}
+function renderCalendario(){
+  main.innerHTML=`<div class="card wrap"><table><tr><th>Mes</th><th>Semanas</th><th>Bloque</th><th>Enfoque</th><th>Cierre</th></tr>
+  ${calendario.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td></tr>`).join('')}
+  </table></div>`;
+}
+function renderCasos(){
+  const c=casos[caseIdx];
+  const solved=myProgress.cases[caseIdx]!==undefined;
+  main.innerHTML=`<div class="card">
+  <span class="tag ${solved?'known':''}">${c[0]} · Caso ${caseIdx+1}/${casos.length}${solved?(myProgress.cases[caseIdx]?' ✓':' ✗'):''}</span>
+  <h3 class="caseh">Viñeta clínica</h3><p>${c[1]}</p>
+  <p><b>${c[2]}</b></p>
+  <div id="opts">${c[3].map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join('')}</div>
+  <div class="just" id="just">${c[5]}</div>
+  </div>
+  <div class="fcbar"><button id="prevCase">← Anterior</button><button id="nextCase">Siguiente →</button></div>`;
+  document.querySelectorAll('#opts .opt').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i;
+    document.querySelectorAll('#opts .opt').forEach((x,j)=>{x.classList.add(j===c[4]?'correct':(j===i&&i!==c[4]?'wrong':''));x.disabled=true;});
+    document.getElementById('just').style.display='block';
+    myProgress.cases[caseIdx]=(i===c[4]);
+    saveProgress();
+  });
+  document.getElementById('prevCase').onclick=()=>{caseIdx=(caseIdx-1+casos.length)%casos.length;renderCasos();};
+  document.getElementById('nextCase').onclick=()=>{caseIdx=(caseIdx+1)%casos.length;renderCasos();};
+}
+function renderFlashcards(){
+  const idx=fcOrder[fcIdx], f=flashcards[idx], known=myProgress.known.includes(idx);
+  main.innerHTML=`<span class="tag ${known?'known':''}">${f[0]} · ${fcIdx+1}/${flashcards.length}${known?' ✓ dominada':''}</span>
+  <div class="fc" id="fcCard">${fcFlipped?f[2]:f[1]}</div>
+  ${fcFlipped?`<div class="markbar"><button id="fcKnow">✓ Sé esto</button><button id="fcReview">↻ Repasar</button></div>`:''}
+  <div class="fcbar"><button id="fcPrev">← Anterior</button><button id="fcShuffle">🔀 Mezclar</button><button id="fcNext">Siguiente →</button></div>`;
+  document.getElementById('fcCard').onclick=()=>{fcFlipped=!fcFlipped;renderFlashcards();};
+  document.getElementById('fcPrev').onclick=()=>{fcIdx=(fcIdx-1+flashcards.length)%flashcards.length;fcFlipped=false;renderFlashcards();};
+  document.getElementById('fcNext').onclick=()=>{fcIdx=(fcIdx+1)%flashcards.length;fcFlipped=false;renderFlashcards();};
+  document.getElementById('fcShuffle').onclick=()=>{fcOrder.sort(()=>Math.random()-0.5);fcIdx=0;fcFlipped=false;renderFlashcards();};
+  const kb=document.getElementById('fcKnow'), rb=document.getElementById('fcReview');
+  if(kb)kb.onclick=()=>{if(!myProgress.known.includes(idx))myProgress.known.push(idx);saveProgress();fcIdx=(fcIdx+1)%flashcards.length;fcFlipped=false;renderFlashcards();};
+  if(rb)rb.onclick=()=>{myProgress.known=myProgress.known.filter(x=>x!==idx);saveProgress();fcIdx=(fcIdx+1)%flashcards.length;fcFlipped=false;renderFlashcards();};
+}
+function render(){
+  renderNav();
+  if(tab==='temario')renderTemario();
+  else if(tab==='calendario')renderCalendario();
+  else if(tab==='casos')renderCasos();
+  else renderFlashcards();
+}
+render();
+</script>
+</body>
+</html>
